@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 if not Path('artifacts').exists():
-    subprocess.call("download_artifacts.sh")
+    subprocess.call("./download_artifacts.sh")
 
 
 @st.cache(hash_funcs={tokenizers.Tokenizer: lambda _: None})
