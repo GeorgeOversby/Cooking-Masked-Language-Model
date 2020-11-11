@@ -1,0 +1,13 @@
+.ipynb_checkpoints
+**/.ipynb_checkpoints
+
+__pycache__/
+**/__pycache__
+
+.pytest_cache
+
+.doit*
+.idea*
+
+data/**
+artifacts/**
