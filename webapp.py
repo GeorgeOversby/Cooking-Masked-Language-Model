@@ -22,6 +22,15 @@ def load_model():
                          topk=500)
 
 
+def clean_recipe(recipe_messy):
+    if recipe_messy.count(',') > recipe_messy.count('\n'):
+        messy_ingredients = recipe_messy.split(',')
+    else:
+        messy_ingredients = recipe_messy.split('\n')
+    cleaned_recipe = [m.replace(' ', '_').replace('finely_chopped', '')
+    for m in messy_ingredients if m]
+    return cleaned_recipe
+
 def normalise_recipe(recipe):
     ingredients = get_tokenizer_vocab(load_tokenizer("artifacts"))
     non_ingredients = get_non_ingredients(ingredients)
@@ -34,14 +43,8 @@ CUMULATIVE_CUTOFF = st.sidebar.slider('cumulative  probability cut-off',0.0,1.0,
 fill_mask = load_model()
 recipe_messy = st.text_area('Recipe:')
 if recipe_messy:
-    if recipe_messy.count(',') > recipe_messy.count('\n'):
-        messy_ingredients = recipe_messy.split(',')
-    else:
-        messy_ingredients = recipe_messy.split('\n')
-    messy_ingredients = [m.replace(' ', '_').replace('finely_chopped', '')
-    for m in messy_ingredients if m]
-
-    recipe_normalised = normalise_recipe(messy_ingredients)
+    recipe_cleaned = clean_recipe(recipe_messy)
+    recipe_normalised = normalise_recipe(recipe_cleaned)
 
     'Normalised recipe: '
     st.write(', '.join(recipe_normalised))
@@ -49,7 +52,7 @@ if recipe_messy:
     result = fill_mask(' '.join(recipe_normalised) + ' <mask>')
     cumulative_probability = 0
     for r in result:
-        r['token_str'], r['score']
+        '#### ', r['token_str'], r['score']
         cumulative_probability += r['score']
         if cumulative_probability > CUMULATIVE_CUTOFF:
             break
