@@ -1,4 +1,4 @@
 transformers==3.2.0
-tokenizers==0.8.0rc1
-tfidf_matcher
-torch
+tokenizers==0.8.1rc2
+tfidf_matcher==0.2.1
+torch==1.7.0
